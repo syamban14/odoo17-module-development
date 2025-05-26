@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_perpustakaan_buku,access_perpustakaan_buku,model_perpustakaan_buku,,1,1,1,1
+access_kategori,access_kategori,model_perpustakaan_kategori,,1,1,1,1

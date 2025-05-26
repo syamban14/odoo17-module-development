@@ -1,0 +1,138 @@
+<odoo>
+    <!-- Form View -->
+    <record id="view_perpustakaan_form" model="ir.ui.view">
+        <field name="name">perpustakaan.form</field>
+        <field name="model">perpustakaan.buku</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="penulis" />
+                        <field name="tahun_terbit" />
+                        <field name="id" readonly="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_perpustakaan_tree" model="ir.ui.view">
+        <field name="name">perpustakaan.tree</field>
+        <field name="model">perpustakaan.buku</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="penulis" />
+                <field name="tahun_terbit" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_perpustakaan_kanban" model="ir.ui.view">
+        <field name="name">perpustakaan.kanban</field>
+        <field name="model">perpustakaan.buku</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card">
+                            <strong>
+                                <field name="name" />
+                            </strong>
+                            <div>
+                                <field name="penulis" />
+                            </div>
+                            <div>
+                                <field name="tahun_terbit" />
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Tree View Kategori -->
+    <record id="view_perpustakaan_tree_kategori" model="ir.ui.view">
+        <field name="name">perpustakaan.tree.kategori</field>
+        <field name="model">perpustakaan.kategori</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View Kategori -->
+    <record id="view_perpustakaan_form_kategori" model="ir.ui.view">
+        <field name="name">perpustakaan.form.kategori</field>
+        <field name="model">perpustakaan.kategori</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="buku_ids">
+                            <tree editable="bottom">
+                                <field name="name" />
+                                <field name="penulis" />
+                                <field name="tahun_terbit" />
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_perpustakaan_search" model="ir.ui.view">
+        <field name="name">perpustakaan.search</field>
+        <field name="model">perpustakaan.buku</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Judul" />
+                <field name="penulis" string="Penulis" />
+                <field name="tahun_terbit" string="Tahun Terbit" />
+            </search>
+        </field>
+    </record>
+
+    <!-- Action and Menu Item -->
+    <record id="action_perpustakaan_kanban" model="ir.actions.act_window">
+        <field name="name">Daftar Buku Perpustakaan Daerah Cilegon</field>
+        <field name="res_model">perpustakaan.buku</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_perpustakaan_search" />
+        <field name="view_id" ref="view_perpustakaan_kanban" />
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new book.
+            </p>
+            <p>
+                You can manage your library books here.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action dan Menu -->
+    <record id="action_perpustakaan_kategori" model="ir.actions.act_window">
+        <field name="name">Kategori Buku</field>
+        <field name="res_model">perpustakaan.kategori</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Root -->
+    <menuitem id="menu_perpustakaan_root" name="Perpustakaan" />
+
+    <!-- Menu Child -->
+    <menuitem id="menu_perpustakaan_buku" name="Buku" parent="menu_perpustakaan_root"
+        action="action_perpustakaan_kanban" />
+    <menuitem id="menu_perpustakaan_kategori" name="Kategori" parent="menu_perpustakaan_root"
+        action="action_perpustakaan_kategori" />
+</odoo>

@@ -1,0 +1,1 @@
+# Odoo 17 Module Development from server framework 101
