@@ -5,6 +5,9 @@
     'depends': [
         'base'
         ],
+    'data': [
+        'security/ir.model.access.csv',
+    ],
     'summary': 'Manage real estate properties, listings, and transactions',
     'description': """
         This module provides functionalities to manage real estate properties, including listings, transactions, and client interactions.
