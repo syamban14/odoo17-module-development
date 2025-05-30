@@ -5,12 +5,14 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <!-- Tree View -->
     <record id="estate_property_view_tree" model="ir.ui.view">
         <field name="name">estate.property.view.tree</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <tree string="Properties">
                 <field name="name" />
+                <field name="property_type_id" />
                 <field name="postcode" />
                 <field name="bedrooms" />
                 <field name="living_area" />
@@ -21,6 +23,7 @@
         </field>
     </record>
 
+    <!-- Form View -->
     <record id="estate_property_view_form" model="ir.ui.view">
         <field name="name">estate.property.view.form</field>
         <field name="model">estate.property</field>
@@ -32,8 +35,12 @@
                             <field name="name" />
                         </h1>
                     </div>
+                    <div class="pb-3">
+                        <field name="tag_ids" widget="many2many_tags" options="{'no_create': True}" />
+                    </div>
                     <group>
                         <group>
+                            <field name="property_type_id" />
                             <field name="postcode" />
                             <field name="date_availability" />
                         </group>
@@ -57,13 +64,23 @@
                                 <field name="state" />
                             </group>
                         </page>
+                        <page string="Offers">
+                            <field name="offer_ids" context="{'default_property_id': id}">
+                            </field>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <field name="user_id"></field>
+                                <field name="partner_id"></field>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- search -->
+    <!-- search View-->
     <record id="estate_property_view_search" model="ir.ui.view">
         <field name="name">estate.property.view.search</field>
         <field name="model">estate.property</field>
@@ -75,6 +92,7 @@
                 <field name="bedrooms" />
                 <field name="living_area" />
                 <field name="facades" />
+                <field name="property_type_id" />
 
                 <filter name="date_availability" string="Date"
                     domain="[('date_availability', '>=', (context_today().strftime('%Y-%m-%d')))]" />
