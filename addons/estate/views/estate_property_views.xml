@@ -46,6 +46,7 @@
                         </group>
                         <group>
                             <field name="expected_price" />
+                            <field name="best_offer" />
                             <field name="selling_price" />
                         </group>
                     </group>
@@ -62,6 +63,7 @@
                                 <field name="garden_orientation" />
                                 <field name="active" />
                                 <field name="state" />
+                                <field name="total_area" />
                             </group>
                         </page>
                         <page string="Offers">

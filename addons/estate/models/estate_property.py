@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import _, api, models, fields
 from dateutil.relativedelta import relativedelta
 
 class EstateProperty(models.Model):
@@ -60,3 +60,43 @@ class EstateProperty(models.Model):
         string='Offers',
         help='Offers made on the property'
     )
+    total_area = fields.Float(
+        compute='_compute_total_area',
+        string='Total Area (sqm)',
+        help='Total area of the property including living area and garden'
+    )
+    best_offer = fields.Float(
+        compute='_compute_best_price',
+        string='Best Offer',
+        help='Best offer made on the property'
+    )
+
+    @api.depends('living_area', 'garden_area')
+    def _compute_total_area(self):
+        for record in self:
+            record.total_area = sum(
+                filter(None, [record.living_area, record.garden_area])
+            )
+
+    @api.depends('offer_ids.price')
+    def _compute_best_price(self):
+        for record in self:
+            if record.offer_ids:
+                record.best_offer = max(record.offer_ids.mapped('price'))
+            else:
+                record.best_offer = 0.0
+
+    @api.onchange('garden')
+    def _onchange_garden(self):
+        if not self.garden:
+            self.garden_area = None
+            self.garden_orientation = None
+        elif self.garden and not self.garden_area:
+            self.garden_area = 10  # Default garden area if not specified
+            self.garden_orientation = 'north'  # Default orientation if not specified
+            return {
+                'warning': {
+                    'title': _("Warning"),
+                    'message': 'Default garden area set to 10 sqm and orientation set to North.'
+                }
+            }
