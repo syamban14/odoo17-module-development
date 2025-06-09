@@ -1,5 +1,6 @@
 from odoo import _, api, models, fields
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError
 
 class EstateProperty(models.Model):
     _name = 'estate.property'
@@ -29,7 +30,7 @@ class EstateProperty(models.Model):
         ('offer_received', 'Offer Received'),
         ('offer_accepted', 'Offer Accepted'),
         ('sold', 'Sold'),
-        ('cancelled', 'Cancelled')
+        ('canceled', 'Canceled')
     ], default='new', string='Status')
     property_type_id = fields.Many2one(
         'estate.property.type',
@@ -100,3 +101,17 @@ class EstateProperty(models.Model):
                     'message': 'Default garden area set to 10 sqm and orientation set to North.'
                 }
             }
+
+    def action_sold(self):
+        for record in self:
+            if record.state == 'canceled':
+                raise UserError(_("You can't sell a canceled property"))
+            record.state = 'sold'
+        return True
+
+    def action_cancel(self):
+        for record in self:
+            if record.state == 'sold':
+                raise UserError(_("You can't cancel a sold property"))
+            record.state = 'canceled'
+        return True

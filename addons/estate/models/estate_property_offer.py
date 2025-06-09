@@ -1,5 +1,6 @@
 from odoo import api, models, fields
 from datetime import timedelta
+from odoo.exceptions import UserError
 class EstatePopertyOffer(models.Model):
     _name = 'estate.property.offer'
     _description = 'Estate Property Offer'
@@ -8,7 +9,7 @@ class EstatePopertyOffer(models.Model):
     status = fields.Selection([
         ('accepted', 'Accepted'),
         ('refused', 'Refused')
-    ], default='accepted', string='Status')
+    ], default='', string='Status')
     partner_id = fields.Many2one(
         'res.partner',
         string='Buyer',
@@ -49,3 +50,16 @@ class EstatePopertyOffer(models.Model):
                 offer.validity = (offer.date_deadline - offer.create_date.date()).days if offer.create_date else 0
             else:
                 offer.validity = (offer.date_deadline - fields.Date.today()).days
+
+    def action_accept(self):
+        for offer in self:
+            if offer.property_id.state == 'sold':
+                raise UserError('The property is already sold')
+            offer.status = 'accepted'
+            offer.property_id.partner_id = offer.partner_id
+            offer.property_id.selling_price = offer.price
+        return True
+
+    def action_refuse(self):
+        for offer in self:
+            offer.status = 'refused'
